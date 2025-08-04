@@ -1,11 +1,20 @@
 <template>
   <div class="pl-4">
-    <ul>
-      <li v-for="(value, key) in data" :key="key">
-        {{ key }}
-        {{value}}
-      </li>
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(value, key) in data" :key="key">
+          <td>{{ key }}</td>
+          <td v-html="formatValue(value)"></td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
 </template>
 
