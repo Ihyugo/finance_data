@@ -1,15 +1,7 @@
 <template>
   <div v-if="info">
     <h1>{{ info.longName }}</h1>
-    <p><strong>所在地:</strong> {{ info.address1 }}, {{ info.city }}, {{ info.country }}</p>
-    <p><strong>郵便番号:</strong> {{ info.zip }}</p>
-    <p><strong>電話番号:</strong> {{ info.phone }}</p>
-    <p><strong>Webサイト:</strong> <a :href="info.website" target="_blank">{{ info.website }}</a></p>
-    <p><strong>業種:</strong> {{ info.industry }}（{{ info.sector }}）</p>
-    <p><strong>従業員数:</strong> {{ info.fullTimeEmployees.toLocaleString() }}人</p>
-    <p><strong>概要:</strong> {{ info.longBusinessSummary }}</p>
 
-    <bar></bar>
     <li v-for="(value, key) in info" :key="key">
       <span v-html="formatValue(key, value)"></span>
       </li>
@@ -28,7 +20,7 @@ import { infoData } from './array/info_data';
 
 
 export default {
-  name: "IndividualStockInfo",
+  name: "CompanyInfo",
   props: {
     msg: String,
   },
