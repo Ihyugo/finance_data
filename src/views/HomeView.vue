@@ -1,16 +1,17 @@
 <template>
   <div class="home">
-    {{ msg }}
+    <MainTableVue msg="Welcome to Your Vue.js App" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import MainTableVue from "@/components/MainTable.vue";
 
 export default {
   name: "HomeView",
-  props: {
-    msg: String,
+  components: {
+    MainTableVue,
   },
 };
 </script>

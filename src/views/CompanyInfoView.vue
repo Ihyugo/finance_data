@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <CompanyInfo />
+    <CompanyInfo :code="code" />
   </div>
 </template>
 
@@ -23,7 +23,9 @@ export default {
   },
   created() {
     this.security_code = this.$route.query.security_code;
-    this.code = this.$route.query.code;
+    const ori_code = this.$route.query.code;
+    // 末尾の１文字を.Tに置き換える
+    this.code = ori_code.slice(0, ori_code.length - 1) + ".T";
   },
 };
 </script>

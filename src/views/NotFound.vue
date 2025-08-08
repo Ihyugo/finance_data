@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="px-4 py-5 my-5 text-center">
-      <h1 class="display-5 fw-bold text-body-emphasis">404 Not Found</h1>
+      <h1 class="display-5 fw-bold text-body-emphasis">
+        404 Not Found
+      </h1>
       <div class="col-lg-6 mx-auto">
         <h3 class="lead mb-4">
           アクセスしようとしたページは見つかりませんでした。
@@ -22,8 +24,9 @@
             to="/"
             type="button"
             class="btn btn-primary btn-lg px-4 gap-3"
-            >ホームに戻る</router-link
           >
+            ホームに戻る
+          </router-link>
         </div>
       </div>
     </div>

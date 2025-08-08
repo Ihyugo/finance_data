@@ -8,13 +8,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) in data" :key="key">
+        <tr
+          v-for="(value, key) in data"
+          :key="key"
+        >
           <td>{{ key }}</td>
-          <td v-html="formatValue(value)"></td>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <td v-html="formatValue(value)" />
         </tr>
       </tbody>
     </table>
-
   </div>
 </template>
 
@@ -26,10 +29,10 @@ export default {
   },
   methods: {
     formatValue(value) {
-        console.log(value);
-      if (typeof value === 'number') {
+      console.log(value);
+      if (typeof value === "number") {
         return value.toLocaleString();
-      } else if (typeof value === 'string' && value.startsWith('http')) {
+      } else if (typeof value === "string" && value.startsWith("http")) {
         return `<a href="${value}" target="_blank">${value}</a>`;
       }
       return value;
