@@ -8,32 +8,19 @@
           <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3">一覧ページ</a>
         </router-link>
       </ul>
-
-      <ul class="navbar-nav px-3">
-        <router-link to="/company-info">
-          <a
-            class="nav-link"
-            href="#"
-          >
-            111111
-          </a>
-        </router-link>
-      </ul>
     </header>
     <nav />
     <router-view />
 
-  <!-- <CompanyInfo msg="Welcome to Your Vue.js App" /> -->
+    <!-- <CompanyInfo msg="Welcome to Your Vue.js App" /> -->
   </div>
 </template>
 
 <script>
-
 export default {
   name: "App",
 };
 </script>
-
 
 <style>
 #app {
