@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import "./CandlestickChart.css";
 import {
   Chart,
   CategoryScale,
@@ -221,12 +222,40 @@ class CandlestickController extends BarController {
   update() {
     const meta = this.getMeta();
     const dataset = this.getDataset();
-    const scale = this.chart.scales.x;
+    const xScale = this.chart.scales.x;
+    const yScale = this.chart.scales.y;
+
+    const candleWidth = 8;
 
     meta.data = dataset.data.map((dataPoint, index) => {
+      const x = xScale.getPixelForValue(index);
+      const yOpen = yScale.getPixelForValue(dataPoint.open);
+      const yClose = yScale.getPixelForValue(dataPoint.close);
+      const yHigh = yScale.getPixelForValue(dataPoint.high);
+      const yLow = yScale.getPixelForValue(dataPoint.low);
+      const top = Math.min(yOpen, yClose);
+      const bottom = Math.max(yOpen, yClose);
+
       return {
-        x: scale.getPixelForValue(index),
-        y: 0, // ダミー値
+        x,
+        y: (top + bottom) / 2, // 中心
+        inRange(mouseX, mouseY) {
+          return (
+            mouseX >= x - candleWidth / 2 &&
+            mouseX <= x + candleWidth / 2 &&
+            mouseY >= yHigh &&
+            mouseY <= yLow
+          );
+        },
+        getCenterPoint() {
+          return { x, y: (top + bottom) / 2 };
+        },
+        tooltipPosition() {
+          return { x, y: top }; // 上側に出したいなら top
+        },
+        hasValue() {
+          return true;
+        },
       };
     });
   }
@@ -1348,251 +1377,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.stock-chart-container {
-  width: 100%;
-  background: #1a202c;
-  color: #a0aec0;
-  border-radius: 8px;
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  min-height: 600px;
-}
-
-.debug-info {
-  background: rgba(45, 55, 72, 0.8);
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
-  font-size: 14px;
-  border-left: 4px solid #4299e1;
-}
-
-.controls-section {
-  background: rgba(45, 55, 72, 0.5);
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 6px;
-}
-
-.period-buttons {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-
-.period-btn {
-  padding: 8px 16px;
-  background: rgba(74, 85, 104, 0.8);
-  border: 1px solid rgba(160, 174, 192, 0.3);
-  border-radius: 4px;
-  color: #a0aec0;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.period-btn:hover {
-  background: rgba(74, 85, 104, 1);
-  border-color: rgba(160, 174, 192, 0.5);
-}
-
-.period-btn.active {
-  background: #4299e1;
-  border-color: #4299e1;
-  color: white;
-}
-
-.custom-range-control {
-  border-top: 1px solid rgba(160, 174, 192, 0.2);
-  padding-top: 15px;
-}
-
-.range-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.range-input-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.range-input-group label {
-  font-size: 14px;
-  min-width: 50px;
-  color: #a0aec0;
-}
-
-.range-input-group input[type="range"] {
-  flex: 1;
-  height: 6px;
-  background: rgba(74, 85, 104, 0.8);
-  border-radius: 3px;
-  outline: none;
-}
-
-.range-input-group input[type="range"]::-webkit-slider-thumb {
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #4299e1;
-  cursor: pointer;
-}
-
-.range-input-group input[type="range"]::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #4299e1;
-  cursor: pointer;
-  border: none;
-}
-
-.range-input-group span {
-  font-size: 12px;
-  color: #718096;
-  min-width: 100px;
-}
-
-.indicators-section {
-  background: rgba(45, 55, 72, 0.5);
-  padding: 15px;
-  margin-bottom: 20px;
-  border-radius: 6px;
-}
-
-.indicators-section h4 {
-  margin: 0 0 12px 0;
-  font-size: 16px;
-  color: #e2e8f0;
-  font-weight: 600;
-}
-
-.indicator-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.indicator-group {
-  display: flex;
-  align-items: center;
-}
-
-.indicator-checkbox {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: 14px;
-  color: #a0aec0;
-  user-select: none;
-  transition: color 0.2s ease;
-}
-
-.indicator-checkbox:hover {
-  color: #e2e8f0;
-}
-
-.indicator-checkbox input[type="checkbox"] {
-  margin-right: 8px;
-  width: 16px;
-  height: 16px;
-  accent-color: #4299e1;
-  cursor: pointer;
-}
-
-.main-chart,
-.macd-chart,
-.rsi-chart {
-  width: 100%;
-  margin-bottom: 20px;
-  background: rgba(45, 55, 72, 0.5);
-  border-radius: 6px;
-  padding: 15px;
-}
-
-.chart-wrapper {
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.main-chart {
-  height: 380px;
-}
-
-.macd-chart {
-  height: 220px;
-}
-
-.rsi-chart {
-  height: 220px;
-}
-
-.main-chart h3,
-.macd-chart h3,
-.rsi-chart h3 {
-  margin: 0 0 15px 0;
-  font-size: 16px;
-  color: #e2e8f0;
-  text-align: center;
-}
-
-canvas {
-  display: block;
-  border-radius: 4px;
-}
-
-@media (max-width: 768px) {
-  .period-buttons {
-    justify-content: center;
-  }
-
-  .period-btn {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .range-inputs {
-    gap: 8px;
-  }
-
-  .range-input-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-  }
-
-  .range-input-group label {
-    min-width: auto;
-  }
-
-  .indicator-controls {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .indicator-checkbox {
-    font-size: 13px;
-  }
-
-  .main-chart {
-    height: 320px;
-  }
-
-  .macd-chart {
-    height: 180px;
-  }
-
-  .rsi-chart {
-    height: 180px;
-  }
-}
-</style>

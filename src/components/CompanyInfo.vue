@@ -55,12 +55,12 @@ export default {
     async getStockInfo() {
       try {
         console.log("Fetching stock info for code:", this.code);
-        const res = await axios.get(
-          "https://fastapi-service-658417983475.us-central1.run.app/stock/" +
-            this.code
-        );
+        // const res = await axios.get(
+        //   "https://fastapi-service-658417983475.us-central1.run.app/stock/" +
+        //     this.code
+        // );
         // ローカルのFastAPIサーバーを使用する場合
-        // const res = await axios.get("http://127.0.0.1:8000/stock/" + this.code);
+        const res = await axios.get("http://127.0.0.1:8000/stock/" + this.code);
 
         this.info = res.data.info;
         this.history = res.data.history;
