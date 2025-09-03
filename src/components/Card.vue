@@ -1,20 +1,25 @@
 <template>
   <div class="card card-place">
-    <img class="card-img-top" />
+    <img class="card-img-top">
     <div class="card-body">
-      <h3 class="card-title">{{ msg }}</h3>
-      <div v-if="brand_code">
-        <h4 class="card-title">銘柄コード： {{ brand_code }}</h4>
+      <h3 class="card-title">
+        {{ msg }}
+      </h3>
+      <div v-if="brandCode">
+        <h4 class="card-title">
+          銘柄コード： {{ brandCode }}
+        </h4>
       </div>
-      <h4 class="card-text">最終更新日： {{ datetime }}</h4>
+      <h4 class="card-text">
+        最終更新日： {{ datetime }}
+      </h4>
       <div v-if="value != null">
         <a
           :href="url"
           class="btn btn-primary"
           target="_blank"
           name="かぶたん"
-          >{{ value }}</a
-        >
+        >{{ value }}</a>
       </div>
     </div>
   </div>
@@ -24,11 +29,26 @@
 export default {
   name: "CardMargin",
   props: {
-    msg: String,
-    brand_code: String,
-    date: String,
-    url: String,
-    value: String,
+    msg: {
+      type: String,
+      default: ""
+    },
+    brandCode: {
+      type: String,
+      default: ""
+    },
+    date: {
+      type: String,
+      default: ""
+    },
+    url: {
+      type: String,
+      default: ""
+    },
+    value: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     return {

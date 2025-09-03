@@ -25,7 +25,10 @@
 export default {
   name: "RecursiveViewer",
   props: {
-    data: Object,
+    data: {
+      type: Object,
+      default: () => ({})
+    },
   },
   methods: {
     formatValue(value) {
