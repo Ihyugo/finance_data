@@ -1,16 +1,21 @@
 <template>
   <div>
-    <CardMargin :date="date" msg="銘柄別信用取引情報" />
-    <br />
+    <CardMargin
+      :date="date"
+      msg="銘柄別信用取引情報"
+    />
+    <br>
 
     <div class="main-table">
       <div class="middle-desc">
-        <hr />
-        <br />
+        <hr>
+        <br>
         <div
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3"
         >
-          <h1 class="h2">個別銘柄 信用取引情報</h1>
+          <h1 class="h2">
+            個別銘柄 信用取引情報
+          </h1>
           <div style="width: 400px">
             <v-select
               v-model="typeValues"
@@ -18,7 +23,7 @@
               label="銘柄の種類選択"
               chips
               multiple
-            ></v-select>
+            />
           </div>
 
           <div style="width: 400px">
@@ -28,7 +33,7 @@
               label="市場の選択"
               chips
               multiple
-            ></v-select>
+            />
           </div>
           <v-btn
             class="icon-button"
@@ -37,18 +42,21 @@
           >
             <csv_icon />
           </v-btn>
-          <v-btn class="icon-button" @click="dialog = true">
+          <v-btn
+            class="icon-button"
+            @click="dialog = true"
+          >
             <gear_icon />
           </v-btn>
         </div>
       </div>
-      <hr />
-      <br />
+      <hr>
+      <br>
       <div class="scroll-table">
         <!-- 検索フィールド -->
         <v-text-field
-          clearable
           v-model="search"
+          clearable
           prepend-inner-icon="mdi-magnify"
           label="検索"
         />
@@ -66,30 +74,35 @@
           height="1000"
           width="150%"
           fixed-header
-          @click:row="handleClick"
           calculate-widths="false"
           items-per-page="50"
           mobile-breakpoint="800"
-        ></v-data-table>
+          @click:row="handleClick"
+        />
       </div>
     </div>
     <div>
-      <v-dialog v-model="dialog" width="800px" scrollable>
-        <v-card prepend-icon="mdi-earth" title="非表示にする列を選択">
-          <v-divider class="mt-3"></v-divider>
+      <v-dialog
+        v-model="dialog"
+        width="800px"
+        scrollable
+      >
+        <v-card
+          prepend-icon="mdi-earth"
+          title="非表示にする列を選択"
+        >
+          <v-divider class="mt-3" />
 
           <v-card-text>
             <v-autocomplete
+              v-model="selected"
               :items="headers"
               label="何も選択しない場合すべての列が表示されます"
               auto-select-first
               multiple
-              v-model="selected"
-            ></v-autocomplete>
+            />
 
-            <small class="text-caption text-medium-emphasis"
-              >非表示にする列を選択できます</small
-            >
+            <small class="text-caption text-medium-emphasis">非表示にする列を選択できます</small>
           </v-card-text>
         </v-card>
       </v-dialog>
@@ -109,10 +122,13 @@ import gear_icon from "./icon/gear_icon.vue";
 const db = firestore.db;
 
 export default {
-  components: { CardMargin, csv_icon, gear_icon },
   name: "MainTable",
+  components: { CardMargin, csv_icon, gear_icon },
   props: {
-    msg: String,
+    msg: {
+      type: String,
+      default: ""
+    },
   },
   data() {
     // ストレージから初期データを取得
@@ -155,9 +171,6 @@ export default {
       selected: selected,
     };
   },
-  mounted() {
-    this.getLastUpdate();
-  },
   watch: {
     date: "readData",
     typeValues: function (val) {
@@ -175,6 +188,9 @@ export default {
     selected: function () {
       this.dialogData();
     },
+  },
+  mounted() {
+    this.getLastUpdate();
   },
   methods: {
     async getLastUpdate() {
