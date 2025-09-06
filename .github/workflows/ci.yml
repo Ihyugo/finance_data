@@ -16,6 +16,8 @@ jobs:
 
     env:
       NPM_CONFIG_AUDIT: false
+      NPM_CONFIG_FUND: false
+      NPM_CONFIG_UPDATE_NOTIFIER: false
 
     steps:
       - name: Checkout code
@@ -27,8 +29,23 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
+      - name: Configure npm
+        run: |
+          npm config set audit false
+          npm config set fund false
+          npm config set update-notifier false
+
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --audit=false --fund=false || npm install --audit=false --fund=false
+          else
+            npm install --audit=false --fund=false
+          fi
+        env:
+          NPM_CONFIG_AUDIT: false
+          NPM_CONFIG_FUND: false
+        continue-on-error: false
 
       - name: Run security audit
         run: npm audit --audit-level=critical
