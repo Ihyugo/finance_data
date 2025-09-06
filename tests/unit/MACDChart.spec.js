@@ -1,4 +1,4 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import MACDChart from "@/components/charts/MACDChart.vue";
 
 // Chart.jsのモック
@@ -75,19 +75,6 @@ describe("MACDChart.vue", () => {
         getImageData: jest.fn(() => ({ data: new Array(4) })),
         putImageData: jest.fn(),
         createImageData: jest.fn(() => []),
-        setTransform: jest.fn(),
-        drawImage: jest.fn(),
-        createPattern: jest.fn(),
-        createLinearGradient: jest.fn(() => ({
-          addColorStop: jest.fn(),
-        })),
-        createRadialGradient: jest.fn(() => ({
-          addColorStop: jest.fn(),
-        })),
-        createImageData: jest.fn(() => []),
-        getImageData: jest.fn(() => ({ data: new Array(4) })),
-        putImageData: jest.fn(),
-        setTransform: jest.fn(),
         drawImage: jest.fn(),
         createPattern: jest.fn(),
         createLinearGradient: jest.fn(() => ({

@@ -1,8 +1,14 @@
 <template>
-  <div class="stock-chart-container" data-testid="stock-chart">
+  <div
+    class="stock-chart-container"
+    data-testid="stock-chart"
+  >
     <!-- 期間選択コントロール -->
     <div class="controls-section">
-      <div class="period-buttons" data-testid="period-buttons">
+      <div
+        class="period-buttons"
+        data-testid="period-buttons"
+      >
         <button
           v-for="period in periodOptions"
           :key="period.value"
@@ -32,7 +38,7 @@
               :disabled="isDrawing"
               data-testid="start-range-slider"
               @input="updateCustomRange"
-            />
+            >
             <span>{{ getDateLabel(customRange.start) }}</span>
           </div>
           <div class="range-input-group">
@@ -45,7 +51,7 @@
               :disabled="isDrawing"
               data-testid="end-range-slider"
               @input="updateCustomRange"
-            />
+            >
             <span>{{ getDateLabel(customRange.end) }}</span>
           </div>
         </div>
@@ -53,7 +59,10 @@
     </div>
 
     <!-- テクニカル指標コントロール -->
-    <div class="indicators-section" data-testid="indicators-section">
+    <div
+      class="indicators-section"
+      data-testid="indicators-section"
+    >
       <h4>テクニカル指標</h4>
       <div class="indicator-controls">
         <div class="indicator-group">
@@ -67,7 +76,7 @@
               type="checkbox"
               :disabled="isDrawing"
               @change="updateCharts"
-            />
+            >
             移動平均線 (5, 25, 75日)
           </label>
         </div>
@@ -83,7 +92,7 @@
               type="checkbox"
               :disabled="isDrawing"
               @change="updateCharts"
-            />
+            >
             ボリンジャーバンド (±1,2,3,4σ)
           </label>
         </div>
@@ -99,7 +108,7 @@
               type="checkbox"
               :disabled="isDrawing"
               @change="updateCharts"
-            />
+            >
             パラボリックSAR
           </label>
         </div>
@@ -110,7 +119,10 @@
           class="drawing-status"
           data-testid="drawing-status"
         >
-          <div class="spinner" data-testid="spinner" />
+          <div
+            class="spinner"
+            data-testid="spinner"
+          />
           <span>チャートを更新中...</span>
         </div>
       </div>

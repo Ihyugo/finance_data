@@ -1,5 +1,4 @@
 import { mount, shallowMount } from "@vue/test-utils";
-import { createApp } from "vue";
 import StockChart from "@/components/StockChart.vue";
 import MACDChart from "@/components/charts/MACDChart.vue";
 import RSIChart from "@/components/charts/RSIChart.vue";

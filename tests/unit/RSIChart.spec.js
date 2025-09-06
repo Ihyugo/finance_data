@@ -1,4 +1,4 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import RSIChart from "@/components/charts/RSIChart.vue";
 
 // Chart.jsのモック
@@ -69,7 +69,6 @@ describe("RSIChart.vue", () => {
         getImageData: jest.fn(() => ({ data: new Array(4) })),
         putImageData: jest.fn(),
         createImageData: jest.fn(() => []),
-        setTransform: jest.fn(),
         drawImage: jest.fn(),
         createPattern: jest.fn(),
         createLinearGradient: jest.fn(() => ({
