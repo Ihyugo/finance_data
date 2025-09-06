@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="info"
-    class="company-info-container"
-  >
+  <div v-if="info" class="company-info-container">
     <!-- 企業ヘッダー -->
     <CompanyHeader
       :company-name="info.longName"
@@ -22,33 +19,18 @@
     <!-- タブコンテンツ -->
     <div class="tab-content">
       <!-- 基本情報タブ -->
-      <OverviewTab
-        v-if="activeTab === 'overview'"
-        :company-info="info"
-      />
+      <OverviewTab v-if="activeTab === 'overview'" :company-info="info" />
 
       <!-- 財務指標タブ -->
-      <div
-        v-if="activeTab === 'financials'"
-        class="tab-panel"
-      >
+      <div v-if="activeTab === 'financials'" class="tab-panel">
         <div class="info-grid">
-          <InfoCard
-            title="収益性指標"
-            :items="profitabilityItems"
-          />
-          <InfoCard
-            title="バリュエーション指標"
-            :items="valuationItems"
-          />
+          <InfoCard title="収益性指標" :items="profitabilityItems" />
+          <InfoCard title="バリュエーション指標" :items="valuationItems" />
         </div>
       </div>
 
       <!-- 企業行動タブ -->
-      <div
-        v-if="activeTab === 'corporate'"
-        class="tab-panel"
-      >
+      <div v-if="activeTab === 'corporate'" class="tab-panel">
         <div class="info-grid">
           <div class="info-card">
             <h3>配当情報</h3>
@@ -66,10 +48,7 @@
                 class="info-item"
               >
                 <span class="label">{{ formatLabel(key) }}</span>
-                <span
-                  class="value"
-                  v-text="formatDetailValue(value)"
-                />
+                <span class="value" v-text="formatDetailValue(value)" />
               </div>
             </div>
           </div>
@@ -77,10 +56,7 @@
       </div>
 
       <!-- 役員情報タブ -->
-      <div
-        v-if="activeTab === 'executives'"
-        class="tab-panel"
-      >
+      <div v-if="activeTab === 'executives'" class="tab-panel">
         <div class="info-card full-width">
           <h3>役員一覧</h3>
           <div class="executives-grid">
@@ -94,31 +70,21 @@
                 <span class="executive-title">{{ exec.title || "N/A" }}</span>
               </div>
               <div class="executive-details">
-                <div
-                  v-if="exec.age"
-                  class="executive-detail"
-                >
+                <div v-if="exec.age" class="executive-detail">
                   <span class="label">年齢:</span>
                   <span class="value">{{ exec.age }}歳</span>
                 </div>
-                <div
-                  v-if="exec.yearBorn"
-                  class="executive-detail"
-                >
+                <div v-if="exec.yearBorn" class="executive-detail">
                   <span class="label">生年:</span>
                   <span class="value">{{ exec.yearBorn }}年</span>
                 </div>
-                <div
-                  v-if="exec.totalPay"
-                  class="executive-detail"
-                >
+                <div v-if="exec.totalPay" class="executive-detail">
                   <span class="label">報酬:</span>
-                  <span class="value">¥{{ (exec.totalPay / 10000).toFixed(0) }}万円</span>
+                  <span class="value"
+                    >¥{{ (exec.totalPay / 10000).toFixed(0) }}万円</span
+                  >
                 </div>
-                <div
-                  v-if="exec.fiscalYear"
-                  class="executive-detail"
-                >
+                <div v-if="exec.fiscalYear" class="executive-detail">
                   <span class="label">会計年度:</span>
                   <span class="value">{{ exec.fiscalYear }}年</span>
                 </div>
@@ -129,20 +95,14 @@
       </div>
 
       <!-- チャートタブ -->
-      <div
-        v-if="activeTab === 'chart'"
-        class="tab-panel"
-      >
+      <div v-if="activeTab === 'chart'" class="tab-panel">
         <div class="chart-container">
           <StockChart :stock-data="history" />
         </div>
       </div>
 
       <!-- 詳細情報タブ -->
-      <div
-        v-if="activeTab === 'details'"
-        class="tab-panel"
-      >
+      <div v-if="activeTab === 'details'" class="tab-panel">
         <div class="info-card full-width">
           <h3>全データ</h3>
           <div class="data-table">
@@ -151,16 +111,9 @@
               <span class="header-cell">値</span>
             </div>
             <div class="table-body">
-              <div
-                v-for="(value, key) in info"
-                :key="key"
-                class="table-row"
-              >
+              <div v-for="(value, key) in info" :key="key" class="table-row">
                 <span class="cell label">{{ formatLabel(key) }}</span>
-                <span
-                  class="cell value"
-                  v-text="formatDetailValue(value)"
-                />
+                <span class="cell value" v-text="formatDetailValue(value)" />
               </div>
             </div>
           </div>
@@ -168,17 +121,14 @@
       </div>
     </div>
   </div>
-  <div
-    v-else
-    class="loading-container"
-  >
+  <div v-else class="loading-container">
     <div class="loading-spinner" />
     <p>{{ message || "企業情報を読み込み中..." }}</p>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import apiService from "@/services/apiService.js";
 import { infoData } from "./array/info_data";
 import StockChart from "./StockChart.vue";
 import CompanyHeader from "./company/CompanyHeader.vue";
@@ -293,15 +243,10 @@ export default {
     async getStockInfo() {
       try {
         console.log("Fetching stock info for code:", this.code);
-        const res = await axios.get(
-          "https://fastapi-service-658417983475.us-central1.run.app/stock/" +
-            this.code
-        );
-        // ローカルのFastAPIサーバーを使用する場合
-        // const res = await axios.get("http://127.0.0.1:8000/stock/" + this.code);
+        const data = await apiService.getStockInfo(this.code);
 
-        this.info = res.data.info;
-        this.history = res.data.history;
+        this.info = data.info;
+        this.history = data.history;
       } catch (e) {
         this.message = "エラー: " + e;
       }
