@@ -1,13 +1,20 @@
 <template>
-  <div class="stock-chart-container">
+  <div
+    class="stock-chart-container"
+    data-testid="stock-chart"
+  >
     <!-- 期間選択コントロール -->
     <div class="controls-section">
-      <div class="period-buttons">
+      <div
+        class="period-buttons"
+        data-testid="period-buttons"
+      >
         <button
           v-for="period in periodOptions"
           :key="period.value"
           :class="['period-btn', { active: selectedPeriod === period.value }]"
           :disabled="isDrawing"
+          :data-testid="`period-${period.value}`"
           @click="setPeriod(period.value)"
         >
           {{ period.label }}
@@ -18,6 +25,7 @@
       <div
         v-if="selectedPeriod === 'custom'"
         class="custom-range-control"
+        data-testid="custom-range-control"
       >
         <div class="range-inputs">
           <div class="range-input-group">
@@ -28,6 +36,7 @@
               :min="0"
               :max="stockData.length - 1"
               :disabled="isDrawing"
+              data-testid="start-range-slider"
               @input="updateCustomRange"
             >
             <span>{{ getDateLabel(customRange.start) }}</span>
@@ -40,6 +49,7 @@
               :min="customRange.start"
               :max="stockData.length - 1"
               :disabled="isDrawing"
+              data-testid="end-range-slider"
               @input="updateCustomRange"
             >
             <span>{{ getDateLabel(customRange.end) }}</span>
@@ -49,13 +59,17 @@
     </div>
 
     <!-- テクニカル指標コントロール -->
-    <div class="indicators-section">
+    <div
+      class="indicators-section"
+      data-testid="indicators-section"
+    >
       <h4>テクニカル指標</h4>
       <div class="indicator-controls">
         <div class="indicator-group">
           <label
             class="indicator-checkbox"
             :class="{ disabled: isDrawing }"
+            data-testid="moving-average-checkbox"
           >
             <input
               v-model="indicators.movingAverage.enabled"
@@ -71,6 +85,7 @@
           <label
             class="indicator-checkbox"
             :class="{ disabled: isDrawing }"
+            data-testid="bollinger-bands-checkbox"
           >
             <input
               v-model="indicators.bollingerBands.enabled"
@@ -86,6 +101,7 @@
           <label
             class="indicator-checkbox"
             :class="{ disabled: isDrawing }"
+            data-testid="parabolic-sar-checkbox"
           >
             <input
               v-model="indicators.parabolic.enabled"
@@ -101,8 +117,12 @@
         <div
           v-if="isDrawing"
           class="drawing-status"
+          data-testid="drawing-status"
         >
-          <div class="spinner" />
+          <div
+            class="spinner"
+            data-testid="spinner"
+          />
           <span>チャートを更新中...</span>
         </div>
       </div>
