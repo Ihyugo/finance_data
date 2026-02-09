@@ -14,25 +14,19 @@
             <div class="stat-number">
               {{ totalStocks }}
             </div>
-            <div class="stat-label">
-              銘柄数
-            </div>
+            <div class="stat-label">銘柄数</div>
           </div>
           <div class="stat-item">
             <div class="stat-number">
               {{ lastUpdate }}
             </div>
-            <div class="stat-label">
-              最終更新
-            </div>
+            <div class="stat-label">最終更新</div>
           </div>
           <div class="stat-item">
             <div class="stat-number">
               {{ marketCount }}
             </div>
-            <div class="stat-label">
-              市場数
-            </div>
+            <div class="stat-label">市場数</div>
           </div>
         </div>
       </div>
@@ -45,26 +39,50 @@
       </div>
     </div>
 
+    <!-- 日経平均情報セクション -->
+    <div class="nikkei-section">
+      <div class="nikkei-container">
+        <v-card class="nikkei-card" elevation="6">
+          <div class="nikkei-header">
+            <div class="nikkei-icon-wrapper">
+              <v-icon class="nikkei-icon"> mdi-chart-line </v-icon>
+            </div>
+            <div class="nikkei-content">
+              <h2 class="nikkei-title">日本経済指数</h2>
+              <p class="nikkei-subtitle">市場全体のトレンドを総合的に分析</p>
+            </div>
+          </div>
+          <v-card-text class="nikkei-text">
+            日経の株価指数情報や市場トレンドの詳細データを確認できます。
+          </v-card-text>
+          <v-card-actions class="nikkei-actions">
+            <v-spacer />
+            <v-btn
+              color="primary"
+              variant="elevated"
+              size="large"
+              append-icon="mdi-arrow-right"
+              @click="navigateToNikkei"
+            >
+              詳細を確認
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+    </div>
+
     <!-- メインコンテンツ -->
     <div class="main-content">
       <!-- 検索・フィルターセクション -->
       <div class="filter-section">
-        <v-card
-          class="filter-card"
-          elevation="2"
-        >
+        <v-card class="filter-card" elevation="2">
           <v-card-title class="filter-title">
-            <v-icon class="mr-2">
-              mdi-filter-variant
-            </v-icon>
+            <v-icon class="mr-2"> mdi-filter-variant </v-icon>
             データフィルター
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col
-                cols="12"
-                md="4"
-              >
+              <v-col cols="12" md="4">
                 <v-select
                   v-model="typeValues"
                   :items="typeOptions"
@@ -75,10 +93,7 @@
                   density="comfortable"
                 />
               </v-col>
-              <v-col
-                cols="12"
-                md="4"
-              >
+              <v-col cols="12" md="4">
                 <v-select
                   v-model="marketValues"
                   :items="marketOptions"
@@ -89,10 +104,7 @@
                   density="comfortable"
                 />
               </v-col>
-              <v-col
-                cols="12"
-                md="4"
-              >
+              <v-col cols="12" md="4">
                 <v-text-field
                   v-model="search"
                   clearable
@@ -129,20 +141,12 @@
 
       <!-- データテーブルセクション -->
       <div class="table-section">
-        <v-card
-          class="table-card"
-          elevation="2"
-        >
+        <v-card class="table-card" elevation="2">
           <v-card-title class="table-title">
-            <v-icon class="mr-2">
-              mdi-table
-            </v-icon>
+            <v-icon class="mr-2"> mdi-table </v-icon>
             個別銘柄 信用取引情報
             <v-spacer />
-            <v-chip
-              color="primary"
-              variant="tonal"
-            >
+            <v-chip color="primary" variant="tonal">
               {{ filteredData.length }} 件
             </v-chip>
           </v-card-title>
@@ -164,11 +168,7 @@
                 @click:row="handleClick"
               >
                 <template #item.code="{ item }">
-                  <v-chip
-                    color="primary"
-                    variant="tonal"
-                    size="small"
-                  >
+                  <v-chip color="primary" variant="tonal" size="small">
                     {{ item.code }}
                   </v-chip>
                 </template>
@@ -203,16 +203,10 @@
     </div>
 
     <!-- 設定ダイアログ -->
-    <v-dialog
-      v-model="dialog"
-      width="600px"
-      scrollable
-    >
+    <v-dialog v-model="dialog" width="600px" scrollable>
       <v-card>
         <v-card-title class="d-flex align-center">
-          <v-icon class="mr-2">
-            mdi-cog
-          </v-icon>
+          <v-icon class="mr-2"> mdi-cog </v-icon>
           表示設定
         </v-card-title>
         <v-divider />
@@ -225,22 +219,13 @@
             chips
             variant="outlined"
           />
-          <v-alert
-            type="info"
-            variant="tonal"
-            class="mt-3"
-          >
+          <v-alert type="info" variant="tonal" class="mt-3">
             選択した列は非表示になります。何も選択しない場合、すべての列が表示されます。
           </v-alert>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            color="primary"
-            @click="dialog = false"
-          >
-            閉じる
-          </v-btn>
+          <v-btn color="primary" @click="dialog = false"> 閉じる </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -249,7 +234,14 @@
 
 <script>
 import firestore from "@/firestore.js";
-import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+  collectionGroup,
+} from "firebase/firestore";
 import { getHeader } from "@/components/calculation/header_data";
 import { downloadCSV } from "@/components/calculation/download_csv";
 
@@ -284,6 +276,7 @@ export default {
       headers: [],
       allHeaders: [],
       data: [],
+      nikkeiData: [],
       filteredData: [],
       dialog: false,
       selected: getStoredValue("selected", []),
@@ -352,7 +345,7 @@ export default {
       const q = query(
         collection(db, "LastUpdate"),
         orderBy("date", "desc"),
-        limit(1)
+        limit(1),
       );
       const date = await getDocs(q);
       date.forEach((d) => {
@@ -371,6 +364,27 @@ export default {
         localStorage.setItem("date", this.date);
         this.updateHeaders();
         this.filterData();
+      } finally {
+        this.loading = false;
+      }
+    },
+    async getNikkeiData() {
+      this.loading = true;
+      try {
+        const group = collectionGroup(
+          db,
+          "合計 Total_二市場合計 Total_金額 Val.",
+        );
+        const collections = query(group);
+        let sub = await getDocs(collections);
+        sub.forEach((doc) => {
+          this.tabledatas.push(doc.data());
+        });
+        this.nikkeiData = [];
+        sub.forEach((doc) => {
+          this.nikkeiData.push(doc.data());
+        });
+        localStorage.setItem("nikkei_data", JSON.stringify(this.nikkeiData));
       } finally {
         this.loading = false;
       }
@@ -414,7 +428,7 @@ export default {
         filtered = [];
       } else {
         filtered = filtered.filter((item) =>
-          this.typeValues.includes(item.type)
+          this.typeValues.includes(item.type),
         );
       }
 
@@ -423,14 +437,14 @@ export default {
         filtered = [];
       } else {
         filtered = filtered.filter((item) =>
-          this.marketValues.includes(item.market)
+          this.marketValues.includes(item.market),
         );
       }
 
       // 検索フィルター
       if (this.search) {
         filtered = filtered.filter((item) =>
-          this.customFilter(null, this.search, item)
+          this.customFilter(null, this.search, item),
         );
       }
 
@@ -446,6 +460,9 @@ export default {
       });
       window.open(tab.href, "_blank");
     },
+    navigateToNikkei() {
+      this.$router.push({ name: "nikkei-info" });
+    },
     downloadCSVFile() {
       downloadCSV(this.filteredData, this.date);
     },
@@ -458,7 +475,7 @@ export default {
       if (isNumeric) {
         // 数字の場合：半角に変換して証券コードでパターンマッチ
         const searchCode = search.replace(/[０-９]/g, (s) =>
-          String.fromCharCode(s.charCodeAt(0) - 0xfee0)
+          String.fromCharCode(s.charCodeAt(0) - 0xfee0),
         );
         const code = item.code || "";
         // 証券コード検索：入力した数字を含む証券コードを検索
@@ -622,6 +639,84 @@ export default {
   }
 }
 
+/* 日経平均情報セクション */
+.nikkei-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 40px 20px;
+}
+
+.nikkei-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.nikkei-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.nikkei-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.15) !important;
+  border-color: rgba(102, 126, 234, 0.1);
+}
+
+.nikkei-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.nikkei-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.nikkei-icon {
+  font-size: 32px;
+}
+
+.nikkei-content {
+  flex: 1;
+}
+
+.nikkei-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+.nikkei-subtitle {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.nikkei-text {
+  padding: 16px 24px;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.nikkei-actions {
+  padding: 16px 24px;
+  background: #fafbfc;
+}
+
 /* メインコンテンツ */
 .main-content {
   background: #f8fafc;
@@ -702,6 +797,25 @@ export default {
   .filter-actions .v-btn {
     width: 100%;
   }
+
+  .nikkei-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .nikkei-icon-wrapper {
+    margin: 0 auto;
+  }
+
+  .nikkei-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nikkei-actions .v-btn {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -716,6 +830,35 @@ export default {
 
   .main-content {
     padding: 20px 10px;
+  }
+
+  .nikkei-section {
+    padding: 24px 12px;
+  }
+
+  .nikkei-header {
+    padding: 16px;
+  }
+
+  .nikkei-content {
+    flex: 1;
+  }
+
+  .nikkei-title {
+    font-size: 1.25rem;
+  }
+
+  .nikkei-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .nikkei-text {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+  }
+
+  .nikkei-actions {
+    padding: 12px 16px;
   }
 }
 </style>
