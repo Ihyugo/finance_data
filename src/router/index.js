@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import CompanyInfoView from "@/views/CompanyInfoView.vue";
+import NikkeiInfoView from "@/views/NikkeiInfoView.vue";
 import NotFound from "@/views/NotFound.vue";
 
 const routes = [
@@ -13,6 +14,11 @@ const routes = [
     path: "/company-info",
     name: "company-info",
     component: CompanyInfoView,
+  },
+  {
+    path: "/nikkei-info",
+    name: "nikkei-info",
+    component: NikkeiInfoView,
   },
   {
     path: "/error", // ワイルドカードで全ての未定義ルートをキャッチ
